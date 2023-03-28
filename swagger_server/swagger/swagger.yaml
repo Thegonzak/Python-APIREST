@@ -1,0 +1,236 @@
+openapi: 3.0.0
+info:
+  title: Api rest for globalhitss-api
+  description: Api para que permite resolver el desafio para la empresa globalhitss.
+  contact:
+    email: luis@gmail.com
+  version: 1.0.0
+servers:
+- url: https://localhost:8080/rest/globalhitss-api/v1.0
+  description: server development.
+tags:
+- name: institution
+  description: institution api.
+paths:
+  /institution:
+    get:
+      tags:
+      - institution
+      summary: Lista instituciones
+      description: Lista instituciones
+      operationId: get_institution
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-openapi-router-controller: swagger_server.controllers.institution_controller
+    put:
+      tags:
+      - institution
+      summary: Actualiza una instituciÃ³n existente
+      description: Actualiza una instituciÃ³n existente
+      operationId: update_institution
+      requestBody:
+        description: Actualiza una instituciÃ³n existente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInstitutionUpd'
+        required: true
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-openapi-router-controller: swagger_server.controllers.institution_controller
+    post:
+      tags:
+      - institution
+      summary: Agrega una nueva instituciÃ³n
+      description: Agrega una nueva instituciÃ³n
+      operationId: add_institution
+      requestBody:
+        description: Crea una nueva instituciÃ³n
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInstitutionAdd'
+        required: true
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-openapi-router-controller: swagger_server.controllers.institution_controller
+  /institution/{institutionId}:
+    get:
+      tags:
+      - institution
+      summary: Busca una instituciÃ³n por ID
+      description: Busca una instituciÃ³n por ID
+      operationId: get_institution_by_id
+      parameters:
+      - name: institutionId
+        in: path
+        description: Busca una instituciÃ³n por ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-openapi-router-controller: swagger_server.controllers.institution_controller
+    delete:
+      tags:
+      - institution
+      summary: Elimina una instituciÃ³n
+      description: Elimina una instituciÃ³n
+      operationId: delete_institution
+      parameters:
+      - name: institutionId
+        in: path
+        description: Institution id to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-openapi-router-controller: swagger_server.controllers.institution_controller
+components:
+  schemas:
+    RequestInstitutionAdd:
+      required:
+      - address
+      - createdUser
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: udemy
+        description:
+          type: string
+          example: EducaciÃ³n continua
+        address:
+          type: string
+          example: Colombia - Bogota
+        createdUser:
+          type: string
+          example: admin
+    ResponseInstitution:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "0"
+        message:
+          type: string
+          example: proceso exitoso
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseInstitutionData'
+      example:
+        code: 0
+        message: proceso satisfactorio
+        data:
+        - id: 1
+          name: udemy
+          description: EducaciÃ³n continua
+          address: Guayaquil - Ecuador
+          createdUser: admin
+          createdAt: 25/01/2023
+          updatedUser: admin
+          updatedAt: 25/01/2023
+          status: A
+    ResponseInstitutionData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: udemy
+        description:
+          type: string
+          example: EducaciÃ³n continua
+        address:
+          type: string
+          example: Colombia - Bogota
+        createdUser:
+          type: string
+          example: admin
+        createdAt:
+          type: string
+          example: 25/01/2023
+        updatedUser:
+          type: string
+          example: admin
+        updatedAt:
+          type: string
+          example: 25/01/2023
+        status:
+          type: string
+          example: A
+    Response400:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "-1"
+        message:
+          type: string
+          example: Hubo problemas en el proceso
+    RequestInstitutionUpd:
+      required:
+      - address
+      - description
+      - id
+      - name
+      - updatedUser
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: udemy
+        description:
+          type: string
+          example: EducaciÃ³n continua
+        address:
+          type: string
+          example: Colombia - Bogota
+        updatedUser:
+          type: string
+          example: admin
+    inline_response_200:
+      oneOf:
+      - $ref: '#/components/schemas/ResponseInstitution'
+      - $ref: '#/components/schemas/Response400'
+
